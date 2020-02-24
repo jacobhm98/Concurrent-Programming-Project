@@ -12,45 +12,55 @@ using std::endl;
 
 //method declarations
 void initializeGrid(int);
+void updateMatrix(void);
 
 //global datastructures
-int** oldMatrix;
-int** newMatrix;
+int*** Matrix;
 
 
 int main (int argc, char * argv[]){
-	if (argc != 4){
-		cout << "Arguments should be gridSize, numIters, and numWorkers" << endl;
+	int numIters = 0;
+	int gridSize = 0;
+	if (argc != 3){
+		cout << "Arguments should be gridSize, and numIters" << endl;
 		return 1;
 	}
 	else{
-		int gridSize =  atoi(argv[1]);
-		int numIters = atoi(argv[2]);
-		int numWorkers = atoi(argv[3]);
+		gridSize =  atoi(argv[1]);
+		numIters = atoi(argv[2]);
 	}
-	
+	for (int i = 0; i < numIters; ++i){
+		updateMatrix();
+	}	
 
 	return 0;
 }
 
 void initializeGrid(int gridSize){
 	//initialize the global matrix
-	oldMatrix, newMatrix = new int*[gridSize];
+	//Matrix[0] is old matrix, Matrix[1] is new matrix.
+	Matrix = new int**[2];
+	Matrix[0] = new int*[gridSize];
+	Matrix[1] = new int*[gridSize];
 	for (int i = 0; i<gridSize; ++i){
-		oldMatrix[i], newMatrix[i] = new int[gridSize];
+		Matrix[0][i], Matrix[1][i] = new int[gridSize];
 	}
 
 	//set boundary values to 1
 	for (int i = 0; i < gridSize; i += gridSize - 1){
 		for (int j = 0; j < gridSize; ++j){
-			oldMatrix[i][j] = 1;
-			oldMatrix[j][i] = 1;
+			Matrix[0][i][j] = 1;
+			Matrix[0][j][i] = 1;
 		} 
 	}
 	//set internal values to 0
 	for (int i = 1; i < gridSize - 1; ++i){
 		for (int j = 1; j < gridSize - 1; ++j){
-			oldMatrix[i][j] = 0;
+			Matrix[0][i][j] = 0;
 		}
 	}
+}
+
+void updateMatrix(){
+	
 }
