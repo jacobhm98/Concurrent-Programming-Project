@@ -1,8 +1,3 @@
-
-#ifndef _REENTRANT
-#define _REENTRANT
-#endif
-#include <omp.h>
 #include <iostream>
 #define DEBUG 0
 #define DEFAULT_THREADS 1
