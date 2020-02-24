@@ -16,6 +16,8 @@ void initializeGrid(int);
 //global datastructures
 int** oldMatrix;
 int** newMatrix;
+
+
 int main (int argc, char * argv[]){
 	if (argc != 4){
 		cout << "Arguments should be gridSize, numIters, and numWorkers" << endl;
