@@ -1,6 +1,5 @@
 #include <iostream>
 #define DEBUG 0
-#define DEFAULT_THREADS 1
 
 using std::cout;
 using std::endl;
@@ -57,10 +56,14 @@ void initializeGrid(int gridSize){
 }
 
 void updateMatrix(int gridSize){
+	//do the calculations for all internal points of the grid (not boundary points)
 	for (int i = 1; i < gridSize - 1; ++i){
 		for (int j = 1; j < gridSize - 1; ++j){
 			Matrix[1][i][j] = (Matrix[0][i-1][j]+Matrix[0][i+1][j]+Matrix[0][i][j-1]+Matrix[0][i][j+1]) * .25;
 		}
 	}
+	//make new matrix old matrix to prepare for next iteration, save old matrix in new matrix so we can calculate maxdiff still
+	int ** temp = Matrix[0];
 	Matrix[0] = Matrix[1];
+	Matrix[1] = temp;
 }
