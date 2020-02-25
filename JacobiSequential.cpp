@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstdlib>
 #define DEBUG 0
 
 using std::cout;
@@ -7,6 +8,7 @@ using std::endl;
 //method declarations
 void initializeGrid(int);
 void updateMatrix(int);
+int maxDiff(int);
 
 //global datastructures
 int*** Matrix;
@@ -25,7 +27,8 @@ int main (int argc, char * argv[]){
 	}
 	for (int i = 0; i < numIters; ++i){
 		updateMatrix(gridSize);
-	}	
+	}
+	int maxDifference = maxDiff(gridSize);	
 
 	return 0;
 }
@@ -66,4 +69,17 @@ void updateMatrix(int gridSize){
 	int ** temp = Matrix[0];
 	Matrix[0] = Matrix[1];
 	Matrix[1] = temp;
+}
+
+int maxDiff(int gridSize){
+	double maxDiff = 0;
+	for (int i = 0; i < gridSize; ++i){
+		for (int j = 0; j < gridSize; ++j){
+			int currentDiff = std::abs(Matrix[0][i][j] - Matrix[1][i][j]);
+			if (maxDiff < currentDiff){
+				maxDiff = currentDiff;
+			}
+		}
+	}
+	return maxDiff;
 }
