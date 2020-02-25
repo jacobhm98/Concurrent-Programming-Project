@@ -1,5 +1,7 @@
 #include <iostream>
 #include <cstdlib>
+#include <fstream>
+#include <chrono>
 #define DEBUG 0
 
 using std::cout;
@@ -25,10 +27,24 @@ int main (int argc, char * argv[]){
 		gridSize =  atoi(argv[1]);
 		numIters = atoi(argv[2]);
 	}
+	auto startTime = std::chrono::high_resolution_clock::now();
 	for (int i = 0; i < numIters; ++i){
 		updateMatrix(gridSize);
 	}
-	int maxDifference = maxDiff(gridSize);	
+	int maxDifference = maxDiff(gridSize);
+	auto endTime = std::chrono::high_resolution_clock::now();
+	auto duration = std::chrono::duration_cast<std::chrono::microseconds>(endTime - startTime);
+	printf("Grid Size, and Number of Iterations: %d, %d\n", gridSize, numIters);
+	cout << "Execution time of the computational part, in microseconds: " << duration.count() << endl;
+	cout << "The largest change an arbitrary grid went through this cycle is: " << maxDifference << endl;
+	std::ofstream out;
+	out.open("./filedata.out");
+	for (int i = 0; i < gridSize; ++i){
+		for (int j = 0; j < gridSize; ++j){
+			out << "|" << Matrix[0][i][j] << "|";
+		}
+		out << endl;
+	}	
 
 	return 0;
 }
