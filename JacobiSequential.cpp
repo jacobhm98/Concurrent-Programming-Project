@@ -12,7 +12,7 @@ using std::vector;
 //method declarations
 void initializeGrid(int);
 void updateMatrix(int);
-int maxDiff(int);
+double maxDiff(int);
 void printMatrix(int, int);
 
 //global datastructures
@@ -35,9 +35,7 @@ int main (int argc, char * argv[]){
 	for (int i = 0; i < numIters; ++i){
 		updateMatrix(gridSize);
 	}
-	printMatrix(gridSize, 0);
-	printMatrix(gridSize, 1);
-	int maxDifference = maxDiff(gridSize);
+	double maxDifference = maxDiff(gridSize);
 	auto endTime = std::chrono::high_resolution_clock::now();
 	auto duration = std::chrono::duration_cast<std::chrono::microseconds>(endTime - startTime);
 	printf("Grid Size, and Number of Iterations: %d, %d\n", gridSize, numIters);
@@ -90,7 +88,6 @@ void updateMatrix(int gridSize){
 		}
 	}
 	//make new matrix old matrix to prepare for next iteration, save old matrix in new matrix so we can calculate maxdiff still
-	
 	vector<vector<double>> temp;
 	vector<vector<double>> * p1 = &Matrix[0];
 	vector<vector<double>> * p2 = &Matrix[1];
@@ -99,17 +96,16 @@ void updateMatrix(int gridSize){
 	*p1 = temp;
 }
 
-int maxDiff(int gridSize){
+double maxDiff(int gridSize){
 	double maxDiff = 0;
 	for (int i = 0; i < gridSize; ++i){
 		for (int j = 0; j < gridSize; ++j){
-			int currentDiff = std::abs(Matrix[0][i][j] - Matrix[1][i][j]);
-			//cout << "Maxdiff, currentDiff: " << maxDiff << ", " << currentDiff << endl;
+			double currentDiff = std::abs(Matrix[0][i][j] - Matrix[1][i][j]);
 			if (maxDiff < currentDiff){
 				maxDiff = currentDiff;
 			}
+			}
 		}
-	}
 	return maxDiff;
 }
 void printMatrix(int gridSize, int current){
