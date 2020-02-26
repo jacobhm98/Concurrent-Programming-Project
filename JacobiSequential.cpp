@@ -87,9 +87,9 @@ void updateMatrix(int gridSize){
 		}
 	}
 	//make new matrix old matrix to prepare for next iteration, save old matrix in new matrix so we can calculate maxdiff still
-//	int ** temp = Matrix[0];
-//	Matrix[0] = Matrix[1];
-//	Matrix[1] = temp;
+	vector<vector<int>> * temp = &Matrix[0];
+	Matrix [0] = Matrix[1];
+	Matrix[1] = *temp;
 }
 
 int maxDiff(int gridSize){
