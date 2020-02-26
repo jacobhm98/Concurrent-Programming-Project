@@ -13,6 +13,7 @@ using std::vector;
 void initializeGrid(int);
 void updateMatrix(int);
 int maxDiff(int);
+void printMatrix(int);
 
 //global datastructures
 vector<vector<vector<int>>> Matrix;
@@ -103,4 +104,14 @@ int maxDiff(int gridSize){
 		}
 	}
 	return maxDiff;
+}
+void printMatrix(int gridSize){
+	for (int i = 0; i < gridSize; ++i){
+		for (int j = 0; j < gridSize; ++j){
+			cout << "|";
+			cout << Matrix[0][i][j];
+			cout << "|";
+		}
+		cout << endl;
+	} 
 }
