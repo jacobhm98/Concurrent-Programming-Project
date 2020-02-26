@@ -13,7 +13,7 @@ using std::vector;
 void initializeGrid(int);
 void updateMatrix(int);
 int maxDiff(int);
-void printMatrix(int);
+void printMatrix(int, int);
 
 //global datastructures
 vector<vector<vector<double>>> Matrix;
@@ -31,14 +31,12 @@ int main (int argc, char * argv[]){
 		numIters = atoi(argv[2]);
 	}
 	initializeGrid(gridSize);
-	cout << "this is the state of the matrix after initialization" << endl;
-	printMatrix(gridSize);
 	auto startTime = std::chrono::high_resolution_clock::now();
 	for (int i = 0; i < numIters; ++i){
 		updateMatrix(gridSize);
-		cout << "State of matrix after each iteration" << endl;
-		printMatrix(gridSize);
 	}
+	printMatrix(gridSize, 0);
+	printMatrix(gridSize, 1);
 	int maxDifference = maxDiff(gridSize);
 	auto endTime = std::chrono::high_resolution_clock::now();
 	auto duration = std::chrono::duration_cast<std::chrono::microseconds>(endTime - startTime);
@@ -68,8 +66,6 @@ void initializeGrid(int gridSize){
 	}
 
 	//set boundary values to 1
-	Matrix[0][0][0] = 1;
-	cout << "debug" << endl;
 	for (int i = 0; i < gridSize; i += gridSize - 1){
 		for (int j = 0; j < gridSize; ++j){
 			Matrix[0][i][j] = 1;
@@ -94,9 +90,13 @@ void updateMatrix(int gridSize){
 		}
 	}
 	//make new matrix old matrix to prepare for next iteration, save old matrix in new matrix so we can calculate maxdiff still
-	vector<vector<double>> * temp = &Matrix[0];
-	Matrix [0] = Matrix[1];
-	Matrix[1] = *temp;
+	
+	vector<vector<double>> temp;
+	vector<vector<double>> * p1 = &Matrix[0];
+	vector<vector<double>> * p2 = &Matrix[1];
+	temp = *p2;
+	*p2 = *p1;
+	*p1 = temp;
 }
 
 int maxDiff(int gridSize){
@@ -104,6 +104,7 @@ int maxDiff(int gridSize){
 	for (int i = 0; i < gridSize; ++i){
 		for (int j = 0; j < gridSize; ++j){
 			int currentDiff = std::abs(Matrix[0][i][j] - Matrix[1][i][j]);
+			//cout << "Maxdiff, currentDiff: " << maxDiff << ", " << currentDiff << endl;
 			if (maxDiff < currentDiff){
 				maxDiff = currentDiff;
 			}
@@ -111,11 +112,11 @@ int maxDiff(int gridSize){
 	}
 	return maxDiff;
 }
-void printMatrix(int gridSize){
+void printMatrix(int gridSize, int current){
 	for (int i = 0; i < gridSize; ++i){
 		for (int j = 0; j < gridSize; ++j){
 			cout << "|";
-			cout << Matrix[0][i][j];
+			cout << Matrix[current][i][j];
 			cout << "|";
 		}
 		cout << endl;
