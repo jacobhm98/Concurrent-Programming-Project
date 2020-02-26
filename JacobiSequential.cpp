@@ -16,7 +16,7 @@ int maxDiff(int);
 void printMatrix(int);
 
 //global datastructures
-vector<vector<vector<int>>> Matrix;
+vector<vector<vector<double>>> Matrix;
 
 
 int main (int argc, char * argv[]){
@@ -31,9 +31,13 @@ int main (int argc, char * argv[]){
 		numIters = atoi(argv[2]);
 	}
 	initializeGrid(gridSize);
+	cout << "this is the state of the matrix after initialization" << endl;
+	printMatrix(gridSize);
 	auto startTime = std::chrono::high_resolution_clock::now();
 	for (int i = 0; i < numIters; ++i){
 		updateMatrix(gridSize);
+		cout << "State of matrix after each iteration" << endl;
+		printMatrix(gridSize);
 	}
 	int maxDifference = maxDiff(gridSize);
 	auto endTime = std::chrono::high_resolution_clock::now();
@@ -70,6 +74,8 @@ void initializeGrid(int gridSize){
 		for (int j = 0; j < gridSize; ++j){
 			Matrix[0][i][j] = 1;
 			Matrix[0][j][i] = 1;
+			Matrix[1][i][j] = 1;
+			Matrix[1][j][i] = 1;
 		} 
 	}
 	//set internal values to 0
@@ -88,7 +94,7 @@ void updateMatrix(int gridSize){
 		}
 	}
 	//make new matrix old matrix to prepare for next iteration, save old matrix in new matrix so we can calculate maxdiff still
-	vector<vector<int>> * temp = &Matrix[0];
+	vector<vector<double>> * temp = &Matrix[0];
 	Matrix [0] = Matrix[1];
 	Matrix[1] = *temp;
 }
