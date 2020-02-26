@@ -27,6 +27,7 @@ int main (int argc, char * argv[]){
 		gridSize =  atoi(argv[1]);
 		numIters = atoi(argv[2]);
 	}
+	initializeGrid(gridSize);
 	auto startTime = std::chrono::high_resolution_clock::now();
 	for (int i = 0; i < numIters; ++i){
 		updateMatrix(gridSize);
@@ -60,6 +61,8 @@ void initializeGrid(int gridSize){
 	}
 
 	//set boundary values to 1
+	Matrix[0][0][0] = 1;
+	cout << "debug" << endl;
 	for (int i = 0; i < gridSize; i += gridSize - 1){
 		for (int j = 0; j < gridSize; ++j){
 			Matrix[0][i][j] = 1;
