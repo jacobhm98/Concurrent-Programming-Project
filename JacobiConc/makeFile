@@ -1,0 +1,3 @@
+#!/bin/bash
+
+g++ JacobiConcurrent.cpp -o JacobiConcurrent -fopenmp
