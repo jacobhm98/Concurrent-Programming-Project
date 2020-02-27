@@ -100,9 +100,10 @@ void initializeGrid(int gridSize){
 //and the cold points will get slightly warmer, until all of the points reach the same value. Laplaces PDE: Nabla²(f(x,y,z...) = 0.
 //This method simulates this, by updating each point on the matrix to the average of its neighbouring 4 points.
 void updateMatrix(int gridSize, int numWorkers){
-	//do the calculations for all internal points of the grid (not boundary points)
+	//set the number of threads we wish to use, taken from the commandline. Do the parallelize the for loop with omp.	
 	omp_set_num_threads(numWorkers);
 	#pragma omp parallel for
+	//do the calculations for all internal points of the grid (not boundary points)
 	for (int i = 1; i < gridSize - 1; ++i){
 		for (int j = 1; j < gridSize - 1; ++j){
 			Matrix[1][i][j] = (Matrix[0][i-1][j]+Matrix[0][i+1][j]+Matrix[0][i][j-1]+Matrix[0][i][j+1]) * .25;
