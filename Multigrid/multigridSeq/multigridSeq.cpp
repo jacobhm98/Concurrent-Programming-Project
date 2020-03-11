@@ -8,6 +8,10 @@
 using std::cout;
 using std::endl;
 using std::vector;
+
+//function declarations
+void initializeGrid(int gridSize);
+
 //global datastructure
 vector<vector<vector<double>>> Matrix;
 
@@ -27,18 +31,13 @@ int main (int argc, char * argv[]){
 	initializeGrid(gridSize);
 	//begin the computations, start the timer right before
 	auto startTime = std::chrono::high_resolution_clock::now();
-	for (int i = 0; i < numIters; ++i){
-		updateMatrix(gridSize);
-	}
-	
-	
-	double maxDifference = maxDiff(gridSize);
+	Jacobi iterate(Matrix);
 	auto endTime = std::chrono::high_resolution_clock::now();
 	auto duration = std::chrono::duration_cast<std::chrono::microseconds>(endTime - startTime);
 	//print out the specified data
-	printf("Grid Size, and Number of Iterations: %d, %d\n", gridSize, numIters);
-	cout << "Execution time of the computational part, in microseconds: " << duration.count() << endl;
-	cout << "The largest change an arbitrary grid went through this cycle is: " << maxDifference << endl;
+	//printf("Grid Size, and Number of Iterations: %d, %d\n", gridSize, numIters);
+	//cout << "Execution time of the computational part, in microseconds: " << duration.count() << endl;
+	//cout << "The largest change an arbitrary grid went through this cycle is: " << maxDifference << endl;
 	//print out the state of the matrix to filedata.out
 	std::ofstream out;
 	out.open("./filedata.out");
@@ -53,7 +52,7 @@ int main (int argc, char * argv[]){
 }
 
 //a method which takes the gridsize and initializes our matrix to what it's supposed to be (border cells = 1, everything else = 0)
-initializeGrid(int gridSize){
+void initializeGrid(int gridSize){
 	//initialize the global matrix
 	Matrix.resize(2);
 	Matrix[0].resize(gridSize);

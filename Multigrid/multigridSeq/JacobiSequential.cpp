@@ -25,8 +25,8 @@ Jacobi::Jacobi(vector<vector<vector<double>>> &Matrix){
 //the temperatures will reach an equilibrium across the entire input space. A hot point surrounded by very cold points will get colder quickly
 //and the cold points will get slightly warmer, until all of the points reach the same value. Laplaces PDE: Nabla²(f(x,y,z...) = 0.
 //This method simulates this, by updating each point on the matrix to the average of its neighbouring 4 points.
-void Jacobi::updateMatrix(vector<vector<vector<int>>> &Matrix){
-	int gridSize = Matrix[].size();
+void Jacobi::updateMatrix(vector<vector<vector<double>>> &Matrix){
+	int gridSize = Matrix[0].size();
 	//do the calculations for all internal points of the grid (not boundary points)
 	for (int i = 1; i < gridSize - 1; ++i){
 		for (int j = 1; j < gridSize - 1; ++j){
@@ -43,8 +43,8 @@ void Jacobi::updateMatrix(vector<vector<vector<int>>> &Matrix){
 }
 //Calculate the values delta of each point from this iteration and last, and return the value of the highest one. The smaller this value is,
 //the less effective each subsequent iteration is, and the closer we are to the limit.
-double Jacobi::maxDiff(vector<vector<vector<int>>> &Matrix){
-	int gridSize = Matrix[].size();
+double Jacobi::maxDiff(vector<vector<vector<double>>> &Matrix){
+	int gridSize = Matrix[0].size();
 	double maxDiff = 0;
 	for (int i = 0; i < gridSize; ++i){
 		for (int j = 0; j < gridSize; ++j){
@@ -58,8 +58,8 @@ double Jacobi::maxDiff(vector<vector<vector<int>>> &Matrix){
 }
 
 //For debugging.
-void Jacobi::printMatrix(vector<vector<vector<int>>> &Matrix, int current){
-	int gridSize = Matrix[].size();
+void Jacobi::printMatrix(vector<vector<vector<double>>> &Matrix, int current){
+	int gridSize = Matrix[0].size();
 	for (int i = 0; i < gridSize; ++i){
 		for (int j = 0; j < gridSize; ++j){
 			cout << "|";
