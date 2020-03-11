@@ -1,0 +1,3 @@
+#!/bin/bash
+
+g++ -o multigridSeq multigridSeq.cpp JacobiSequential.cpp
