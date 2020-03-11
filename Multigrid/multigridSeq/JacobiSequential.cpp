@@ -27,6 +27,7 @@ Jacobi::Jacobi(vector<vector<vector<double>>> &Matrix){
 //This method simulates this, by updating each point on the matrix to the average of its neighbouring 4 points.
 void Jacobi::updateMatrix(vector<vector<vector<double>>> &Matrix){
 	int gridSize = Matrix[0].size();
+	cout << "this is the gridsize: " << gridSize << endl;
 	//do the calculations for all internal points of the grid (not boundary points)
 	for (int i = 1; i < gridSize - 1; ++i){
 		for (int j = 1; j < gridSize - 1; ++j){
