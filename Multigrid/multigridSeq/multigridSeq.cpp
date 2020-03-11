@@ -53,7 +53,7 @@ int main (int argc, char * argv[]){
 }
 
 //a method which takes the gridsize and initializes our matrix to what it's supposed to be (border cells = 1, everything else = 0)
-void initializeGrid(int gridSize){
+initializeGrid(int gridSize){
 	//initialize the global matrix
 	Matrix.resize(2);
 	Matrix[0].resize(gridSize);

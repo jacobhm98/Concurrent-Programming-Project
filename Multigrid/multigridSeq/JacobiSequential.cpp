@@ -13,40 +13,14 @@ using std::cout;
 using std::endl;
 using std::vector;
 
-//a method which takes the gridsize and initializes our matrix to what it's supposed to be (border cells = 1, everything else = 0)
-void initializeGrid(int gridSize){
-	//initialize the global matrix
-	Matrix.resize(2);
-	Matrix[0].resize(gridSize);
-	Matrix[1].resize(gridSize);
-	for (int i = 0; i < gridSize; ++i){
-		Matrix[0][i].resize(gridSize);
-		Matrix[1][i].resize(gridSize);
-	}
-
-	//set boundary values to 1
-	for (int i = 0; i < gridSize; i += gridSize - 1){
-		for (int j = 0; j < gridSize; ++j){
-			Matrix[0][i][j] = 1;
-			Matrix[0][j][i] = 1;
-			Matrix[1][i][j] = 1;
-			Matrix[1][j][i] = 1;
-		} 
-	}
-	//set internal values to 0
-	for (int i = 1; i < gridSize - 1; ++i){
-		for (int j = 1; j < gridSize - 1; ++j){
-			Matrix[0][i][j] = 0;
-		}
-	}
-}
 //Laplace's PDE, or Nabla² takes the limit of each point tending towards the average of its neighbours points, 
 //and how this varies with time. This is why it is sometimes called the heat equation: given an input in 1d, 2d, 3d ... 
 //where each point has a value corresponding to its temperature, where the temperature is given as f(x,y,z..) , as time -> infinity,
 //the temperatures will reach an equilibrium across the entire input space. A hot point surrounded by very cold points will get colder quickly
 //and the cold points will get slightly warmer, until all of the points reach the same value. Laplaces PDE: Nabla²(f(x,y,z...) = 0.
 //This method simulates this, by updating each point on the matrix to the average of its neighbouring 4 points.
-void updateMatrix(int gridSize){
+void updateMatrix(vector<vector<vector<int>>> Matrix){
+	int gridSize = Matrix[].size();
 	//do the calculations for all internal points of the grid (not boundary points)
 	for (int i = 1; i < gridSize - 1; ++i){
 		for (int j = 1; j < gridSize - 1; ++j){
@@ -63,11 +37,12 @@ void updateMatrix(int gridSize){
 }
 //Calculate the values delta of each point from this iteration and last, and return the value of the highest one. The smaller this value is,
 //the less effective each subsequent iteration is, and the closer we are to the limit.
-double maxDiff(int gridSize){
+double maxDiff(vector<vector<vector<int>>> Matrix){
+	int gridSize = Matrix[].size();
 	double maxDiff = 0;
 	for (int i = 0; i < gridSize; ++i){
 		for (int j = 0; j < gridSize; ++j){
-			double currentDiff = std::abs(Matrix[0][i][j] - Matrix[1][i][j]);
+			double currentDiff = (1 - Matrix[0][i][j]);
 			if (maxDiff < currentDiff){
 				maxDiff = currentDiff;
 			}
@@ -77,7 +52,8 @@ double maxDiff(int gridSize){
 }
 
 //For debugging.
-void printMatrix(int gridSize, int current){
+void printMatrix(vector<vector<vector<int>>> Matrix, int current){
+	int gridSize = Matrix[].size();
 	for (int i = 0; i < gridSize; ++i){
 		for (int j = 0; j < gridSize; ++j){
 			cout << "|";
