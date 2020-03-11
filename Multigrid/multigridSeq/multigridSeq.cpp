@@ -30,6 +30,8 @@ int main (int argc, char * argv[]){
 	for (int i = 0; i < numIters; ++i){
 		updateMatrix(gridSize);
 	}
+	
+	
 	double maxDifference = maxDiff(gridSize);
 	auto endTime = std::chrono::high_resolution_clock::now();
 	auto duration = std::chrono::duration_cast<std::chrono::microseconds>(endTime - startTime);
@@ -48,4 +50,32 @@ int main (int argc, char * argv[]){
 	}	
 
 	return 0;
+}
+
+//a method which takes the gridsize and initializes our matrix to what it's supposed to be (border cells = 1, everything else = 0)
+void initializeGrid(int gridSize){
+	//initialize the global matrix
+	Matrix.resize(2);
+	Matrix[0].resize(gridSize);
+	Matrix[1].resize(gridSize);
+	for (int i = 0; i < gridSize; ++i){
+		Matrix[0][i].resize(gridSize);
+		Matrix[1][i].resize(gridSize);
+	}
+
+	//set boundary values to 1
+	for (int i = 0; i < gridSize; i += gridSize - 1){
+		for (int j = 0; j < gridSize; ++j){
+			Matrix[0][i][j] = 1;
+			Matrix[0][j][i] = 1;
+			Matrix[1][i][j] = 1;
+			Matrix[1][j][i] = 1;
+		} 
+	}
+	//set internal values to 0
+	for (int i = 1; i < gridSize - 1; ++i){
+		for (int j = 1; j < gridSize - 1; ++j){
+			Matrix[0][i][j] = 0;
+		}
+	}
 }

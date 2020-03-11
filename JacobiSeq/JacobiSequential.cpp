@@ -114,12 +114,12 @@ double maxDiff(int gridSize){
 	double maxDiff = 0;
 	for (int i = 0; i < gridSize; ++i){
 		for (int j = 0; j < gridSize; ++j){
-			double currentDiff = std::abs(Matrix[0][i][j] - Matrix[1][i][j]);
+			double currentDiff = (1 - Matrix[0][i][j]);
 			if (maxDiff < currentDiff){
 				maxDiff = currentDiff;
 			}
-			}
 		}
+	}
 	return maxDiff;
 }
 
