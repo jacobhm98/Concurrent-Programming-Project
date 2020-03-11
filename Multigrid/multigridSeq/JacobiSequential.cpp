@@ -1,17 +1,23 @@
-/* A sequential version of a PDE solver for Laplace's equation. Using the Jacobi iteration technique.
- * Compile: g++ JacobiSequential.cpp -o <executable>
- * Usage: ./<executable> int gridSize, int number of iterations
- */
 
 #include <iostream>
 #include <cstdlib>
-#include <fstream>
-#include <chrono>
 #include <vector>
 #include "../Jacobi.h"
 using std::cout;
 using std::endl;
 using std::vector;
+
+Jacobi::Jacobi(int numIters, vector<vector<vector<double>>> &Matrix){
+	for (int i = 0; i < numIters; ++i){
+		updateMatrix(Matrix);
+	}
+}
+
+Jacobi::Jacobi(vector<vector<vector<double>>> &Matrix){
+	while (maxDiff(Matrix) != 0){
+		updateMatrix(Matrix);
+	}
+}
 
 //Laplace's PDE, or Nabla² takes the limit of each point tending towards the average of its neighbours points, 
 //and how this varies with time. This is why it is sometimes called the heat equation: given an input in 1d, 2d, 3d ... 
@@ -19,7 +25,7 @@ using std::vector;
 //the temperatures will reach an equilibrium across the entire input space. A hot point surrounded by very cold points will get colder quickly
 //and the cold points will get slightly warmer, until all of the points reach the same value. Laplaces PDE: Nabla²(f(x,y,z...) = 0.
 //This method simulates this, by updating each point on the matrix to the average of its neighbouring 4 points.
-void updateMatrix(vector<vector<vector<int>>> Matrix){
+void Jacobi::updateMatrix(vector<vector<vector<int>>> &Matrix){
 	int gridSize = Matrix[].size();
 	//do the calculations for all internal points of the grid (not boundary points)
 	for (int i = 1; i < gridSize - 1; ++i){
@@ -37,7 +43,7 @@ void updateMatrix(vector<vector<vector<int>>> Matrix){
 }
 //Calculate the values delta of each point from this iteration and last, and return the value of the highest one. The smaller this value is,
 //the less effective each subsequent iteration is, and the closer we are to the limit.
-double maxDiff(vector<vector<vector<int>>> Matrix){
+double Jacobi::maxDiff(vector<vector<vector<int>>> &Matrix){
 	int gridSize = Matrix[].size();
 	double maxDiff = 0;
 	for (int i = 0; i < gridSize; ++i){
@@ -52,7 +58,7 @@ double maxDiff(vector<vector<vector<int>>> Matrix){
 }
 
 //For debugging.
-void printMatrix(vector<vector<vector<int>>> Matrix, int current){
+void Jacobi::printMatrix(vector<vector<vector<int>>> &Matrix, int current){
 	int gridSize = Matrix[].size();
 	for (int i = 0; i < gridSize; ++i){
 		for (int j = 0; j < gridSize; ++j){
