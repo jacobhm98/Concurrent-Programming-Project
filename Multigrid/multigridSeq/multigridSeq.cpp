@@ -10,10 +10,12 @@ using std::endl;
 using std::vector;
 
 //function declarations
-void initializeGrid(int gridSize);
+void initializeGrid(int gridSize, vector<vector<vector<double>>> &Matrix);
+void resize(int gridSize, vector<vector<vector<double>>> &Matrix);
+void setDirichletBoundaryConditions(vector<vector<vector<double>>> &Matrix);
+void restrict(vector<vector<vector<double>>> &Matrix);
 
 //global datastructure
-vector<vector<vector<double>>> Matrix;
 
 
 int main (int argc, char * argv[]){
@@ -27,8 +29,12 @@ int main (int argc, char * argv[]){
 		gridSize =  atoi(argv[1]);
 		numIters = atoi(argv[2]);
 	}
+	if ((gridSize - 5) % 4 != 0){
+		cout << "The gridsize - 5 needs to be divisible by 4 for the reduction to work properly!" << endl;
+	}
 	
-	initializeGrid(gridSize);
+	vector<vector<vector<double>>> Matrix;
+	initializeGrid(gridSize, Matrix);
 	cout << "initialized" << endl;
 	//begin the computations, start the timer right before
 	auto startTime = std::chrono::high_resolution_clock::now();
@@ -53,8 +59,28 @@ int main (int argc, char * argv[]){
 }
 
 //a method which takes the gridsize and initializes our matrix to what it's supposed to be (border cells = 1, everything else = 0)
-void initializeGrid(int gridSize){
+void initializeGrid(int gridSize, vector<vector<vector<double>>> &Matrix){
 	//initialize the global matrix
+	resize(gridSize, Matrix);
+
+	//set boundary values to 1
+	setDirichletBoundaryConditions(Matrix);
+
+	//set internal values to 0
+	for (int i = 1; i < gridSize - 1; ++i){
+		for (int j = 1; j < gridSize - 1; ++j){
+			Matrix[0][i][j] = 0;
+		}
+	}
+}
+
+void restrict(vector<vector<vector<double>>> &Matrix){
+	int newSize = (Matrix[0].size() + 1) / 2;
+	vector<vector<vector<double>>> temp;
+	
+
+}
+void resize(int gridSize, vector<vector<vector<double>>> &Matrix){
 	Matrix.resize(2);
 	Matrix[0].resize(gridSize);
 	Matrix[1].resize(gridSize);
@@ -62,8 +88,11 @@ void initializeGrid(int gridSize){
 		Matrix[0][i].resize(gridSize);
 		Matrix[1][i].resize(gridSize);
 	}
+	
+}
+void setDirichletBoundaryConditions(vector<vector<vector<double>>> &Matrix){
 
-	//set boundary values to 1
+	int gridSize = Matrix[0].size();
 	for (int i = 0; i < gridSize; i += gridSize - 1){
 		for (int j = 0; j < gridSize; ++j){
 			Matrix[0][i][j] = 1;
@@ -72,10 +101,5 @@ void initializeGrid(int gridSize){
 			Matrix[1][j][i] = 1;
 		} 
 	}
-	//set internal values to 0
-	for (int i = 1; i < gridSize - 1; ++i){
-		for (int j = 1; j < gridSize - 1; ++j){
-			Matrix[0][i][j] = 0;
-		}
-	}
 }
+
