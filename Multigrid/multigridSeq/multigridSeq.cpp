@@ -80,17 +80,18 @@ void restrict(vector<vector<vector<double>>> &Matrix){
 	vector<vector<vector<double>>> tempMatrix;	
 	//initialize the temp matrix to what we want
 	resize(newSize, tempMatrix);
-	printMatrix(tempMatrix, 0);
-	initializeGrid(newSize, tempMatrix);
-	tempMatrix[0][1][2] = 100;
+	setDirichletBoundaryConditions(tempMatrix);
 	printMatrix(tempMatrix, 0);
 	for (int i = 1; i < newSize - 1; ++i){
 		for (int j = 1; j < newSize - 1; ++j){
 			int correspondingI = 2*i;
 			int correspondingJ = 2*j;
+			tempMatrix[0][i][j] = Matrix[0][correspondingI][correspondingJ] * 0.5 + (Matrix[0][correspondingI - 1][correspondingJ] + Matrix[0][correspondingI + 1][correspondingJ] + Matrix[0][correspondingI][correspondingJ - 1] + Matrix[0][correspondingI][correspondingJ + 1]) * 0.125;
 
 		}
 	}
+	printMatrix(Matrix, 0);
+	printMatrix(tempMatrix, 0);
 
 	Matrix = tempMatrix;
 	
