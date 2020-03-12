@@ -49,8 +49,8 @@ void Jacobi::updateMatrix(int numWorkers, vector<vector<vector<double>>> &Matrix
 	*p2 = *p1;
 	*p1 = temp;
 }
-//Calculate the values delta of each point from this iteration and last, and return the value of the highest one. The smaller this value is,
-//the less effective each subsequent iteration is, and the closer we are to the limit.
+
+//calculate the difference between 1 and the smallest valued grid point
 double Jacobi::maxDiff(vector<vector<vector<double>>> &Matrix){
 	int gridSize = Matrix[0].size();
 	double maxDiff = 0;
