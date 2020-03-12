@@ -7,14 +7,16 @@ using std::cout;
 using std::endl;
 using std::vector;
 
-Jacobi::Jacobi(int numIters, vector<vector<vector<double>>> &Matrix){
+//iterate number passed in for the coarse grid
+void Jacobi::iterate(int numIters, vector<vector<vector<double>>> &Matrix){
 	for (int i = 0; i < numIters; ++i){
 		updateMatrix(Matrix);
 	}
 }
 
-Jacobi::Jacobi(vector<vector<vector<double>>> &Matrix){
-	while (maxDiff(Matrix) != 0){
+//iterate four times on the finer grid
+void Jacobi::iterate(vector<vector<vector<double>>> &Matrix){
+	for (int i = 0; i < 4; ++i){
 		updateMatrix(Matrix);
 	}
 }

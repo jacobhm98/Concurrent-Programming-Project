@@ -30,14 +30,23 @@ int main (int argc, char * argv[]){
 	}
 	if ((gridSize - 5) % 4 != 0){
 		cout << "((gridsize - 5) % 4) == 0) for the reduction to work properly!" << endl;
+		return 1;
 	}
 	
 	//Matrix we want to do computations on
 	vector<vector<vector<double>>> Matrix;
+	Jacobi jacobi;
 	initializeGrid(gridSize, Matrix);
-	Jacobi iterate(4, Matrix);
-	printMatrix(Matrix, 0);
+
+	for (int i = 0; i < 3; ++i){
+		jacobi.iterate(Matrix);
+		restrict(Matrix);
+		printMatrix(Matrix, 0);
+	}
+
+	//iterate on the coarsest level
 	restrict(Matrix);
+	jacobi.iterate(numIters, Matrix);
 	printMatrix(Matrix, 0);
 	
 
@@ -84,7 +93,6 @@ void restrict(vector<vector<vector<double>>> &Matrix){
 	//initialize the temp matrix to what we want
 	resize(newSize, tempMatrix);
 	setDirichletBoundaryConditions(tempMatrix);
-	printMatrix(tempMatrix, 0);
 	for (int i = 1; i < newSize - 1; ++i){
 		for (int j = 1; j < newSize - 1; ++j){
 			int correspondingI = 2*i;
@@ -123,7 +131,6 @@ void setDirichletBoundaryConditions(vector<vector<vector<double>>> &Matrix){
 
 //For debugging.
 void printMatrix(vector<vector<vector<double>>> &Matrix, int current){
-	cout << "hello" << endl;
 	int gridSize = Matrix[0].size();
 	for (int i = 0; i < gridSize; ++i){
 		for (int j = 0; j < gridSize; ++j){
