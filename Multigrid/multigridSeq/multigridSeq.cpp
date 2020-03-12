@@ -10,12 +10,12 @@ using std::endl;
 using std::vector;
 
 //function declarations
+void restrict(vector<vector<vector<double>>> &Matrix);
+void interpolate(vector<vector<vector<double>>> &Matrix);
 void initializeGrid(int gridSize, vector<vector<vector<double>>> &Matrix);
 void resize(int gridSize, vector<vector<vector<double>>> &Matrix);
 void setDirichletBoundaryConditions(vector<vector<vector<double>>> &Matrix);
-void restrict(vector<vector<vector<double>>> &Matrix);
 void printMatrix(vector<vector<vector<double>>> &Matrix, int current);
-
 
 int main (int argc, char * argv[]){
 	int numIters = 0;
@@ -48,6 +48,12 @@ int main (int argc, char * argv[]){
 	restrict(Matrix);
 	jacobi.iterate(numIters, Matrix);
 	printMatrix(Matrix, 0);
+
+	for (int i = 0; i < 3; ++i){
+		interpolate(Matrix);
+		jacobi.iterate(Matrix);
+		printMatrix(Matrix, 0);
+	}
 	
 
 	//begin the computations, start the timer right before
@@ -104,7 +110,7 @@ void interpolate(vector<vector<vector<double>>> &Matrix){
 			//update the directly corresponding points
 			int correspondingI = i/2;
 			int correspondingJ = j/2;
-			tempMatrix[0][i][j] = Matrix[correspondingI][correspondingJ];
+			tempMatrix[0][i][j] = Matrix[0][correspondingI][correspondingJ];
 			
 			//update the points directly next to directly corresponding points
 			tempMatrix[0][i - 1][j] += tempMatrix[0][i][j] * 0.5;
@@ -119,6 +125,7 @@ void interpolate(vector<vector<vector<double>>> &Matrix){
 			tempMatrix[0][i + 1][j + 1] += tempMatrix[0][i][j] * 0.25;
 		}
 	}
+	Matrix = tempMatrix;
 }
 
 //a method which takes the gridsize and initializes our matrix to what it's supposed to be (border cells = 1, everything else = 0)
