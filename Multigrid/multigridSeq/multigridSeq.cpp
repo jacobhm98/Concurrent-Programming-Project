@@ -77,13 +77,13 @@ void initializeGrid(int gridSize, vector<vector<vector<double>>> &Matrix){
 
 void restrict(vector<vector<vector<double>>> &Matrix){
 	int newSize = (Matrix[0].size() + 1) / 2;
-	vector<vector<vector<double>>>* temp = new vector<vector<vector<double>>>;;
-	
+	vector<vector<vector<double>>> tempMatrix;	
 	//initialize the temp matrix to what we want
-	resize(newSize, *temp);
-	printMatrix(*temp, 0);
-	initializeGrid(newSize, *temp);
-	printMatrix(*temp, 0);
+	resize(newSize, tempMatrix);
+	printMatrix(tempMatrix, 0);
+	initializeGrid(newSize, tempMatrix);
+	tempMatrix[0][1][2] = 100;
+	printMatrix(tempMatrix, 0);
 	for (int i = 1; i < newSize - 1; ++i){
 		for (int j = 1; j < newSize - 1; ++j){
 			int correspondingI = 2*i;
@@ -92,7 +92,7 @@ void restrict(vector<vector<vector<double>>> &Matrix){
 		}
 	}
 
-	Matrix = *temp;
+	Matrix = tempMatrix;
 	
 
 }
