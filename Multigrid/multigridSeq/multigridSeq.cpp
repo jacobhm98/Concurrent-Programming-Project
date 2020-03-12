@@ -35,11 +35,14 @@ int main (int argc, char * argv[]){
 	//Matrix we want to do computations on
 	vector<vector<vector<double>>> Matrix;
 	initializeGrid(gridSize, Matrix);
+	Jacobi iterate(4, Matrix);
+	printMatrix(Matrix, 0);
 	restrict(Matrix);
+	printMatrix(Matrix, 0);
+	
 
 	//begin the computations, start the timer right before
 	auto startTime = std::chrono::high_resolution_clock::now();
-	Jacobi iterate(Matrix);
 	auto endTime = std::chrono::high_resolution_clock::now();
 	auto duration = std::chrono::duration_cast<std::chrono::microseconds>(endTime - startTime);
 	//print out the specified data
@@ -90,8 +93,6 @@ void restrict(vector<vector<vector<double>>> &Matrix){
 
 		}
 	}
-	printMatrix(Matrix, 0);
-	printMatrix(tempMatrix, 0);
 
 	Matrix = tempMatrix;
 	
