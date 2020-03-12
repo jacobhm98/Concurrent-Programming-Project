@@ -1,0 +1,3 @@
+#!/bin/bash
+
+g++ -o multigridConc multigridConc.cpp JacobiConcurrent.cpp -fopenmp
