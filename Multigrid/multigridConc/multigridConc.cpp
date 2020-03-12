@@ -42,12 +42,12 @@ int main (int argc, char * argv[]){
 
 	for (int i = 0; i < 3; ++i){
 		jacobi.iterateP(numWorkers, Matrix);
-		restrict(Matrix);
+		restrict(numWorkers, Matrix);
 		printMatrix(Matrix, 0);
 	}
 
 	//iterate on the coarsest level
-	restrict(Matrix);
+	restrict(numWorkers, Matrix);
 	jacobi.iterateP(numWorkers, numIters, Matrix);
 	printMatrix(Matrix, 0);
 
@@ -80,13 +80,15 @@ int main (int argc, char * argv[]){
 }
 
 
-void restrict(vector<vector<vector<double>>> &Matrix){
+void restrict(int numWorkers, vector<vector<vector<double>>> &Matrix){
 	int newSize = (Matrix[0].size() + 1) / 2;
 	vector<vector<vector<double>>> tempMatrix;	
 	//initialize the temp matrix to what we want
 	initializeGrid(newSize, tempMatrix);
 	
 	//for each interior point, update it according to G. Andrews textbook p. 550-51
+	omp_set_num_threads(numWorkers);
+	#pragma omp parallel for
 	for (int i = 1; i < newSize - 1; ++i){
 		for (int j = 1; j < newSize - 1; ++j){
 			int correspondingI = 2*i;
@@ -107,12 +109,16 @@ void interpolate(vector<vector<vector<double>>> &Matrix){
 	initializeGrid(newSize, tempMatrix);
 
 	//iterate only over directly corresponding points	
+	omp_set_num_threads(numWorkers);
+	#pragma omp parallel for
 	for (int i = 2; i < newSize - 1; i += 2){
 		for (int j = 2; j < newSize - 1; j += 2){
 			//update the directly corresponding points
 			int correspondingI = i/2;
 			int correspondingJ = j/2;
 			tempMatrix[0][i][j] = Matrix[0][correspondingI][correspondingJ];
+			
+		//barrier needed here	
 			
 			//update the points directly next to directly corresponding points
 			tempMatrix[0][i - 1][j] += tempMatrix[0][i][j] * 0.5;
