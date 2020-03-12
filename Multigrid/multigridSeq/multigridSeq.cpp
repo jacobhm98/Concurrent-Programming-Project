@@ -14,8 +14,7 @@ void initializeGrid(int gridSize, vector<vector<vector<double>>> &Matrix);
 void resize(int gridSize, vector<vector<vector<double>>> &Matrix);
 void setDirichletBoundaryConditions(vector<vector<vector<double>>> &Matrix);
 void restrict(vector<vector<vector<double>>> &Matrix);
-
-//global datastructure
+void printMatrix(vector<vector<vector<double>>> &Matrix, int current);
 
 
 int main (int argc, char * argv[]){
@@ -30,12 +29,14 @@ int main (int argc, char * argv[]){
 		numIters = atoi(argv[2]);
 	}
 	if ((gridSize - 5) % 4 != 0){
-		cout << "The gridsize - 5 needs to be divisible by 4 for the reduction to work properly!" << endl;
+		cout << "((gridsize - 5) % 4) == 0) for the reduction to work properly!" << endl;
 	}
 	
+	//Matrix we want to do computations on
 	vector<vector<vector<double>>> Matrix;
 	initializeGrid(gridSize, Matrix);
-	cout << "initialized" << endl;
+	restrict(Matrix);
+
 	//begin the computations, start the timer right before
 	auto startTime = std::chrono::high_resolution_clock::now();
 	Jacobi iterate(Matrix);
@@ -76,7 +77,22 @@ void initializeGrid(int gridSize, vector<vector<vector<double>>> &Matrix){
 
 void restrict(vector<vector<vector<double>>> &Matrix){
 	int newSize = (Matrix[0].size() + 1) / 2;
-	vector<vector<vector<double>>> temp;
+	vector<vector<vector<double>>>* temp = new vector<vector<vector<double>>>;;
+	
+	//initialize the temp matrix to what we want
+	resize(newSize, *temp);
+	printMatrix(*temp, 0);
+	initializeGrid(newSize, *temp);
+	printMatrix(*temp, 0);
+	for (int i = 1; i < newSize - 1; ++i){
+		for (int j = 1; j < newSize - 1; ++j){
+			int correspondingI = 2*i;
+			int correspondingJ = 2*j;
+
+		}
+	}
+
+	Matrix = *temp;
 	
 
 }
@@ -103,3 +119,16 @@ void setDirichletBoundaryConditions(vector<vector<vector<double>>> &Matrix){
 	}
 }
 
+//For debugging.
+void printMatrix(vector<vector<vector<double>>> &Matrix, int current){
+	cout << "hello" << endl;
+	int gridSize = Matrix[0].size();
+	for (int i = 0; i < gridSize; ++i){
+		for (int j = 0; j < gridSize; ++j){
+			cout << "|";
+			cout << Matrix[current][i][j];
+			cout << "|";
+		}
+		cout << endl;
+	} 
+}
