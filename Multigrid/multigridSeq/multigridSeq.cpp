@@ -43,35 +43,30 @@ int main (int argc, char * argv[]){
 	Jacobi jacobi;
 	initializeGrid(gridSize, Matrix);
 
+	//begin the computations, start the timer right before
+	auto startTime = std::chrono::high_resolution_clock::now();
+	auto endTime = std::chrono::high_resolution_clock::now();
+	auto duration = std::chrono::duration_cast<std::chrono::microseconds>(endTime - startTime);
+	
 	for (int i = 0; i < 3; ++i){
 		jacobi.iterate(Matrix);
 		restrict(Matrix);
-		printMatrix(Matrix, 0);
-		cout << endl;
 	}
 
 	//iterate on the coarsest level
 	restrict(Matrix);
 	jacobi.iterate(numIters, Matrix);
-	printMatrix(Matrix, 0);
-	cout << endl;
 
 	for (int i = 0; i < 3; ++i){
 		interpolate(Matrix);
 		jacobi.iterate(Matrix);
-		printMatrix(Matrix, 0);
-		cout << endl;
 	}
 	
 
-	//begin the computations, start the timer right before
-	auto startTime = std::chrono::high_resolution_clock::now();
-	auto endTime = std::chrono::high_resolution_clock::now();
-	auto duration = std::chrono::duration_cast<std::chrono::microseconds>(endTime - startTime);
 	//print out the specified data
-	//printf("Grid Size, and Number of Iterations: %d, %d\n", gridSize, numIters);
-	//cout << "Execution time of the computational part, in microseconds: " << duration.count() << endl;
-	//cout << "The maximum difference of matrix and solution is: " << maxDifference << endl;
+	printf("Grid Size, and Number of Iterations: %d, %d\n", gridSize, numIters);
+	cout << "Execution time of the computational part, in microseconds: " << duration.count() << endl;
+	cout << "The maximum difference of matrix and solution is: " << maxDifference << endl;
 	//print out the state of the matrix to filedata.out
 	printMatrixtoFile(Matrix, 0);
 	return 0;
