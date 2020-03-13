@@ -4,6 +4,8 @@
 #include <fstream>
 #include <chrono>
 #include <vector>
+#include <iomanip>
+#include <iomanip>
 
 using std::cout;
 using std::endl;
@@ -16,8 +18,11 @@ void initializeGrid(int gridSize, vector<vector<vector<double>>> &Matrix);
 void resize(int gridSize, vector<vector<vector<double>>> &Matrix);
 void setDirichletBoundaryConditions(vector<vector<vector<double>>> &Matrix);
 void printMatrix(vector<vector<vector<double>>> &Matrix, int current);
+void printMatrixtoFile(vector<vector<vector<double>>> &Matrix, int current);
 
 int main (int argc, char * argv[]){
+	cout << std::fixed;
+	cout << std::setprecision(2);
 	int numIters = 0;
 	int gridSize = 0;
 	if (argc != 3){
@@ -42,17 +47,20 @@ int main (int argc, char * argv[]){
 		jacobi.iterate(Matrix);
 		restrict(Matrix);
 		printMatrix(Matrix, 0);
+		cout << endl;
 	}
 
 	//iterate on the coarsest level
 	restrict(Matrix);
 	jacobi.iterate(numIters, Matrix);
 	printMatrix(Matrix, 0);
+	cout << endl;
 
 	for (int i = 0; i < 3; ++i){
 		interpolate(Matrix);
 		jacobi.iterate(Matrix);
 		printMatrix(Matrix, 0);
+		cout << endl;
 	}
 	
 
@@ -65,15 +73,7 @@ int main (int argc, char * argv[]){
 	//cout << "Execution time of the computational part, in microseconds: " << duration.count() << endl;
 	//cout << "The largest change an arbitrary grid went through this cycle is: " << maxDifference << endl;
 	//print out the state of the matrix to filedata.out
-	std::ofstream out;
-	out.open("./filedata.out");
-	for (int i = 0; i < gridSize; ++i){
-		for (int j = 0; j < gridSize; ++j){
-			out << "|" << Matrix[0][i][j] << "|";
-		}
-		out << endl;
-	}	
-
+	printMatrixtoFile(Matrix, 0);
 	return 0;
 }
 
@@ -177,5 +177,19 @@ void printMatrix(vector<vector<vector<double>>> &Matrix, int current){
 			cout << "|";
 		}
 		cout << endl;
+	} 
+}
+void printMatrixtoFile(vector<vector<vector<double>>> &Matrix, int current){
+	std::ofstream out;
+	out << std::fixed << std::setprecision(2);
+	out.open("./filedata.out");
+	int gridSize = Matrix[0].size();
+	for (int i = 0; i < gridSize; ++i){
+		for (int j = 0; j < gridSize; ++j){
+			out << "|";
+			out << Matrix[current][i][j];
+			out << "|";
+		}
+		out << endl;
 	} 
 }

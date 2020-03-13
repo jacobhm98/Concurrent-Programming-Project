@@ -21,12 +21,15 @@ void initializeGrid(int);
 void updateMatrix(int, int);
 double maxDiff(int);
 void printMatrix(int, int);
+void printMatrixtoFile(int current);
 
 //global datastructure
 vector<vector<vector<double>>> Matrix;
 
 
 int main (int argc, char * argv[]){
+	cout << std::fixed;
+	cout << std::setprecision(2);
 	int numIters = 0;
 	int gridSize = 0;
 	int numWorkers = 1;
@@ -55,15 +58,7 @@ int main (int argc, char * argv[]){
 	cout << "Execution time of the computational part, in microseconds: " << duration.count() << endl;
 	cout << "The largest change an arbitrary grid went through this cycle is: " << maxDifference << endl;
 	//print out the state of the matrix to filedata.out
-	std::ofstream out;
-	out.open("./filedata.out");
-	for (int i = 0; i < gridSize; ++i){
-		for (int j = 0; j < gridSize; ++j){
-			out << "|" << Matrix[0][i][j] << "|";
-		}
-		out << endl;
-	}	
-
+	printMatrixtoFile(0);
 	return 0;
 }
 //a method which takes the gridsize and initializes our matrix to what it's supposed to be (border cells = 1, everything else = 0)
@@ -142,5 +137,19 @@ void printMatrix(int gridSize, int current){
 			cout << "|";
 		}
 		cout << endl;
+	} 
+}
+void printMatrixtoFile(int current){
+	std::ofstream out;
+	out << std::fixed << std::setprecision(2);
+	out.open("./filedata.out");
+	int gridSize = Matrix[0].size();
+	for (int i = 0; i < gridSize; ++i){
+		for (int j = 0; j < gridSize; ++j){
+			out << "|";
+			out << Matrix[current][i][j];
+			out << "|";
+		}
+		out << endl;
 	} 
 }
