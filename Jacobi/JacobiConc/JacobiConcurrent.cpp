@@ -56,7 +56,7 @@ int main (int argc, char * argv[]){
 	//print out the specified data
 	printf("Grid Size, and Number of Iterations: %d, %d\n", gridSize, numIters);
 	cout << "Execution time of the computational part, in microseconds: " << duration.count() << endl;
-	cout << "The largest change an arbitrary grid went through this cycle is: " << maxDifference << endl;
+	cout << "The maximum error is: " << maxDifference << endl;
 	//print out the state of the matrix to filedata.out
 	printMatrixtoFile(0);
 	return 0;
