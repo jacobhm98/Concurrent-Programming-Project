@@ -4,23 +4,28 @@
 #include <fstream>
 #include <chrono>
 #include <vector>
+#include <omp.h>
+#include <iomanip>
 
 using std::cout;
 using std::endl;
 using std::vector;
 
 //function declarations
-void restrict(vector<vector<vector<double>>> &Matrix);
-void interpolate(vector<vector<vector<double>>> &Matrix);
+void restrict(int numWorkers, vector<vector<vector<double>>> &Matrix);
+void interpolate(int numWorkers, vector<vector<vector<double>>> &Matrix);
 void initializeGrid(int gridSize, vector<vector<vector<double>>> &Matrix);
 void resize(int gridSize, vector<vector<vector<double>>> &Matrix);
 void setDirichletBoundaryConditions(vector<vector<vector<double>>> &Matrix);
 void printMatrix(vector<vector<vector<double>>> &Matrix, int current);
+void printMatrixtoFile(vector<vector<vector<double>>> &Matrix, int current);
 
 int main (int argc, char * argv[]){
 	int numIters = 0;
 	int gridSize = 0;
 	int numWorkers = 0;
+	cout << std::fixed;
+	cout << std::setprecision(2);
 	if (argc != 4){
 		cout << "Arguments should be gridSize, numIters, and numWorkers" << endl;
 		return 1;
@@ -44,17 +49,20 @@ int main (int argc, char * argv[]){
 		jacobi.iterateP(numWorkers, Matrix);
 		restrict(numWorkers, Matrix);
 		printMatrix(Matrix, 0);
+		cout << endl;
 	}
 
 	//iterate on the coarsest level
 	restrict(numWorkers, Matrix);
 	jacobi.iterateP(numWorkers, numIters, Matrix);
 	printMatrix(Matrix, 0);
+	cout << endl;
 
 	for (int i = 0; i < 3; ++i){
-		interpolate(Matrix);
+		interpolate(numWorkers, Matrix);
 		jacobi.iterateP(numWorkers, Matrix);
 		printMatrix(Matrix, 0);
+		cout << endl;
 	}
 	
 
@@ -67,14 +75,7 @@ int main (int argc, char * argv[]){
 	//cout << "Execution time of the computational part, in microseconds: " << duration.count() << endl;
 	//cout << "The largest change an arbitrary grid went through this cycle is: " << maxDifference << endl;
 	//print out the state of the matrix to filedata.out
-	std::ofstream out;
-	out.open("./filedata.out");
-	for (int i = 0; i < gridSize; ++i){
-		for (int j = 0; j < gridSize; ++j){
-			out << "|" << Matrix[0][i][j] << "|";
-		}
-		out << endl;
-	}	
+	printMatrixtoFile(Matrix, 0);
 
 	return 0;
 }
@@ -101,7 +102,7 @@ void restrict(int numWorkers, vector<vector<vector<double>>> &Matrix){
 	Matrix = tempMatrix;
 }
 
-void interpolate(vector<vector<vector<double>>> &Matrix){
+void interpolate(int numWorkers, vector<vector<vector<double>>> &Matrix){
 	int newSize = Matrix[0].size() * 2 - 1;
 	vector<vector<vector<double>>> tempMatrix;
 
@@ -117,8 +118,12 @@ void interpolate(vector<vector<vector<double>>> &Matrix){
 			int correspondingI = i/2;
 			int correspondingJ = j/2;
 			tempMatrix[0][i][j] = Matrix[0][correspondingI][correspondingJ];
-			
-		//barrier needed here	
+		}
+	}		
+	
+	#pragma omp parallel for
+	for (int i = 2; i < newSize - 1; i += 2){
+		for (int j = 2; j < newSize - 1; j += 2){
 			
 			//update the points directly next to directly corresponding points
 			tempMatrix[0][i - 1][j] += tempMatrix[0][i][j] * 0.5;
@@ -185,5 +190,20 @@ void printMatrix(vector<vector<vector<double>>> &Matrix, int current){
 			cout << "|";
 		}
 		cout << endl;
+	} 
+}
+
+void printMatrixtoFile(vector<vector<vector<double>>> &Matrix, int current){
+	std::ofstream out;
+	out << std::fixed << std::setprecision(2);
+	out.open("./filedata.out");
+	int gridSize = Matrix[0].size();
+	for (int i = 0; i < gridSize; ++i){
+		for (int j = 0; j < gridSize; ++j){
+			out << "|";
+			out << Matrix[current][i][j];
+			out << "|";
+		}
+		out << endl;
 	} 
 }
