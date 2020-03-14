@@ -2,6 +2,6 @@
 
 for ((i = 0; i < 5; i++))
 do
-	OUTPUT=$(../Jacobi/JacobiConc/exTime 200 1000 5)
-	echo $OUTPUT >> jacobiConc200_5w
+	OUTPUT=$(../Multigrid/multigridConc/exTime 17 10 5)
+	echo $OUTPUT >> multigridconc17_5w
 done
