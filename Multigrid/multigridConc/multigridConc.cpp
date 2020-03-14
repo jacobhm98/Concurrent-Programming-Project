@@ -58,11 +58,12 @@ int main (int argc, char * argv[]){
 	}
 
 	//iterate on the coarsest level
+	jacobi.iterateP(numWorkers, Matrix);
 	restrict(numWorkers, Matrix);
 	jacobi.iterateP(numWorkers, numIters, Matrix);
 
 	//interpolate the matrix up to normal size
-	for (int i = 0; i < 3; ++i){
+	for (int i = 0; i < 4; ++i){
 		interpolate(numWorkers, Matrix);
 		jacobi.iterateP(numWorkers, Matrix);
 	}

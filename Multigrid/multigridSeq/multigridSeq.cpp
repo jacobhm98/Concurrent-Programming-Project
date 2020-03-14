@@ -6,7 +6,7 @@
 #include <vector>
 #include <iomanip>
 #include <iomanip>
-#define RESULTS 0
+#define RESULTS 1
 
 using std::cout;
 using std::endl;
@@ -53,10 +53,11 @@ int main (int argc, char * argv[]){
 	}
 
 	//iterate on the coarsest level
+	jacobi.iterate(Matrix);
 	restrict(Matrix);
 	jacobi.iterate(numIters, Matrix);
 
-	for (int i = 0; i < 3; ++i){
+	for (int i = 0; i < 4; ++i){
 		interpolate(Matrix);
 		jacobi.iterate(Matrix);
 	}
