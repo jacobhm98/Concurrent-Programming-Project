@@ -1,7 +1,0 @@
-#!/bin/bash
-
-for ((i = 0; i < 5; i++))
-do
-	OUTPUT=$(../Jacobi/JacobiSeq/exTime 200 1000)
-	echo $OUTPUT >> jacobiSeq200
-done

@@ -6,7 +6,7 @@
 #include <vector>
 #include <iomanip>
 #include <iomanip>
-#define RESULTS 1
+#define RESULTS 0
 
 using std::cout;
 using std::endl;
@@ -69,7 +69,7 @@ int main (int argc, char * argv[]){
 	//print out the specified data
 	printf("Grid Size, and Number of Iterations: %d, %d\n", gridSize, numIters);
 	cout << "Execution time of the computational part, in microseconds: " << duration.count() << endl;
-	cout << "The maximum error of the matrix is: " << maxDifference << endl;
+	cout << "The maximum error of the matrix is: " << jacobi.maxDiff(Matrix) << endl;
 #endif
 #if RESULTS == 1
 	cout << duration.count();
