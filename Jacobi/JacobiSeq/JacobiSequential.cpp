@@ -9,6 +9,7 @@
 #include <chrono>
 #include <vector>
 #include <iomanip>
+#define RESULTS 1
 
 using std::cout;
 using std::endl;
@@ -48,10 +49,15 @@ int main (int argc, char * argv[]){
 	double maxDifference = maxDiff(gridSize);
 	auto endTime = std::chrono::high_resolution_clock::now();
 	auto duration = std::chrono::duration_cast<std::chrono::microseconds>(endTime - startTime);
+#if RESULTS == 0
 	//print out the specified data
 	printf("Grid Size, and Number of Iterations: %d, %d\n", gridSize, numIters);
 	cout << "Execution time of the computational part, in microseconds: " << duration.count() << endl;
 	cout << "The maximum error of the matrix is: " << maxDifference << endl;
+#endif
+#if RESULTS == 1
+	cout << duration.count();
+#endif
 	//print out the state of the matrix to filedata.out
 	printMatrixtoFile(0);
 	return 0;
